@@ -9,7 +9,7 @@ import (
 func main() {
 	pid := os.Getpid()
 	fmt.Println(pid)
-	arr := make([]byte, 1<<30) // 1 GiB
+	arr := make([]byte, 5<<30) // 1 GiB
 	time.Sleep(10*time.Second)
 
 	for i := 0; i < len(arr); i += 4096 {
