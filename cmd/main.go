@@ -2,49 +2,27 @@ package main
 
 import (
 	"fmt"
-	"os"
+	// "os"
 	"time"
 
 	// "time"
-	"golang.org/x/sys/unix"
+	// "golang.org/x/sys/unix"
 )
 var global_var = 12
 
 
 
 func main(){
+	arra_hold := make([]byte, 10737418240)
 
-	AddFileBuffer()
-	
-	// internal_val := 10
-	pid := os.Getpid()
-	
-	// fmt.Printf("Global: %v\n", &global_var)
-	// fmt.Printf("internal: %v\n", &internal_val)
-	fmt.Printf("pid: %v\n", pid)
-	
-	time.Sleep(10*time.Minute)
-	// for {
-	// 	time.Sleep(10*time.Second)
-	// 	fmt.Println("----")
-	// }
-}
+	for i := 0; i < len(arra_hold); i += 4096{
+		held :=arra_hold[i]
+		fmt.Println(held)
 
-func AddFileBuffer() {
-	file, _ := os.OpenFile("./superFile.txt", os.O_RDONLY, 0666)
 
-	// (fd int, offset int64, length int, prot int, flags int) (data []byte, err error)
-	data, err := unix.Mmap(
-		int(file.Fd()),
-		0,
-		1024,
-		unix.PROT_READ,
-		unix.MAP_SHARED,
-		
-	)
-	if err != nil{
-		fmt.Println(err)
+		if i% 2560 == 0{
+			fmt.Printf(`touched byte %d`, i)
+			time.Sleep(1* time.Second)
+		}
 	}
-	fmt.Println(string(data))
-
 }
