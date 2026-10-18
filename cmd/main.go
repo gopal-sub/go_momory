@@ -2,8 +2,11 @@ package main
 
 import (
 	"fmt"
-	"time"
 	"os"
+	"time"
+
+	// "time"
+	"golang.org/x/sys/unix"
 )
 var global_var = 12
 
@@ -11,15 +14,37 @@ var global_var = 12
 
 func main(){
 
-	internal_val := 10
-	pid := os.Getpid()
+	AddFileBuffer()
+	time.Sleep(10*time.Minute)
 
-	fmt.Printf("Global: %v\n", &global_var)
-	fmt.Printf("internal: %v\n", &internal_val)
-	fmt.Printf("pid: %v\n", pid)
+	// internal_val := 10
+	// pid := os.Getpid()
 
-	for {
-		time.Sleep(10*time.Second)
-		fmt.Println("----")
+	// fmt.Printf("Global: %v\n", &global_var)
+	// fmt.Printf("internal: %v\n", &internal_val)
+	// fmt.Printf("pid: %v\n", pid)
+
+	// for {
+	// 	time.Sleep(10*time.Second)
+	// 	fmt.Println("----")
+	// }
+}
+
+func AddFileBuffer() {
+	file, _ := os.OpenFile("./superFile.txt", os.O_RDONLY, 0666)
+
+	// (fd int, offset int64, length int, prot int, flags int) (data []byte, err error)
+	data, err := unix.Mmap(
+		int(file.Fd()),
+		0,
+		1024,
+		unix.PROT_READ,
+		unix.MAP_SHARED,
+		
+	)
+	if err != nil{
+		fmt.Println(err)
 	}
+	fmt.Println(string(data))
+
 }
